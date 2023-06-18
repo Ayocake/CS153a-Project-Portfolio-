@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, } from 'react-native';
+import React, { useState} from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CategoryPicker from '../lib/CategoryPicker';
 
 const Transaction = ({ route, navigation }) => {
-  const {transactions, setTransactions} = route.params;
+  const { transactions, updateTransactions } = route.params;
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
 
-  const handleTransactionSubmit = () => {
-    const newTransaction = { amount: Number(amount), description, category };
-    setTransactions([...transactions, newTransaction]);
-    navigation.goBack();
+  const handleTransactionSubmit = async () => {
+    try {
+      const newTransaction = { amount, description, category };
+      const updatedTransactions = [...transactions, newTransaction];
+      await AsyncStorage.setItem('@transaction_history', JSON.stringify(updatedTransactions));
+      updateTransactions(updatedTransactions); 
+      navigation.goBack(); 
+    } catch(e) {
+      console.log("error in handleTransactionSubmit")
+      console.dir(e);
+    }
+  
   };
 
   return (
@@ -30,12 +40,8 @@ const Transaction = ({ route, navigation }) => {
         style={styles.input}
       />
 
-      <Text style={styles.label}>Enter Transaction Category:</Text>
-      <TextInput 
-        onChangeText={setCategory}
-        value={category}
-        style={styles.input}
-      />
+      <Text style={styles.label}>Select Transaction Category:</Text>
+      <CategoryPicker onCategoryChange={setCategory} />
 
       <TouchableOpacity 
         style={styles.button}
@@ -68,7 +74,7 @@ const styles = StyleSheet.create({
     color: '#212121',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#003b71',  
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
