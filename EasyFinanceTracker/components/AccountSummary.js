@@ -1,37 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import { Card,  Icon } from 'react-native-elements';
+import { Card, Icon } from 'react-native-elements';
+import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AccountSummary = ({ navigation }) => {
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(0);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const getData = async () => {
-        try {
-            const transactionsJson = await AsyncStorage.getItem('@transaction_history');
-            if (transactionsJson !== null) {
-                setTransactions(JSON.parse(transactionsJson));
-            }
-        } catch (e) {
-            console.log("error in getData")
-            console.dir(e)
+      try {
+        const transactionsJson = await AsyncStorage.getItem('@transaction_history');
+        let transactions = [];
+        if (transactionsJson !== null) {
+          transactions = JSON.parse(transactionsJson);
         }
+        const totalBalance = transactions.reduce((total, trans) => total + Number(trans.amount), 0);
+        setBalance(totalBalance);
+        await AsyncStorage.setItem('@account_balance', JSON.stringify(totalBalance));
+      } catch (e) {
+        console.log("error in getData");
+        console.dir(e);
+      }
     };
     getData();
-  }, []);
-
-  useEffect(() => {
-    const totalBalance = transactions.reduce((total, trans) => total + Number(trans.amount), 0);
-    setBalance(totalBalance);
-    AsyncStorage.setItem('@account_balance', JSON.stringify(totalBalance));
-  }, [transactions]);
+  }, [isFocused]);
 
   const resetBalance = async () => {
-    setTransactions([]);
     await AsyncStorage.setItem('@transaction_history', JSON.stringify([]));
     await AsyncStorage.setItem('@account_balance', JSON.stringify(0));
+    setBalance(0);
   };
 
   return (
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   balanceText: {
-    fontSize: 24,
+    fontSize: 20,
     marginBottom: 20,
     fontWeight: 'bold',
     color: '#1d1d1d',

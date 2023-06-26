@@ -10,7 +10,13 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+
+      
+      
     },
+    
+    "permissions": ["CAMERA", "AUDIO_RECORDING"],
+
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -26,5 +32,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+
+    
   }
 }

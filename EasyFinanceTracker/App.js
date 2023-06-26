@@ -9,6 +9,7 @@ import TransactionHistory from './components/TransactionHistory';
 import SetBudgets from './components/SetBudgets';
 import ViewBudgets from './components/ViewBudgets';
 
+
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
         <Stack.Screen name="ViewBudgets" component={ViewBudgets} />
       </Stack.Navigator>
     </NavigationContainer>
+
+
+
   );
 }
 
