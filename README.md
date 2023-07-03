@@ -1,4 +1,5 @@
 EasyFinanceTracker App
+
 This is a Personal Finance Management App built using React Native. The app allows users to track their transactions, view account summaries, set budgets, view transaction history, and split costs with contacts. It provides a user-friendly interface for managing personal finances efficiently.
 
 Features
