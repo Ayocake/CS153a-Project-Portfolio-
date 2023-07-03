@@ -31,9 +31,7 @@ const TransactionHistory = ({ navigation }) => {
       const clearAll = async () => {
         try {
           console.log('in clearData')
-          await AsyncStorage.removeItem('@transaction_history').then(() => {
-            setTransactions([]);
-          });
+          await AsyncStorage.setItem('@transaction_history', JSON.stringify([]));
         } catch(e) {
           console.log("error in clearData ", e);
         }

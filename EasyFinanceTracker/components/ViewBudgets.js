@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Progress from 'react-native-progress';
+import { Card } from 'react-native-elements'; 
 
 const ViewBudgets = () => {
   const [budgets, setBudgets] = useState({});
@@ -32,25 +33,36 @@ const ViewBudgets = () => {
 
   const clearAll = async () => {
     try {
-        console.log('in clearData')
-        await AsyncStorage.clear();
-        setTransactions([]);
+        Alert.alert(
+          'Clear History',
+          'Are you sure you want to clear the history?',
+          [
+            {text: 'Cancel', style: 'cancel'},
+            {text: 'Yes', onPress: async () => {
+              await AsyncStorage.clear();
+              setTransactions([]);
+            }},
+          ],
+          {cancelable: false}
+        );
     } catch(e) {
-        console.log("error in clearData ")
-        console.dir(e)
+        Alert.alert('Error', 'An error occurred while clearing the data.');
     }
-}
+  }
 
   return (
     <View style={styles.container}>
+      
       {Object.entries(budgets).map(([category, budget]) => {
         const progress = calculateProgress(category);
         return (
-          <View key={category} style={styles.item}>
+          <Card key={category}>
+            <Card.Title>{category}</Card.Title>
+            <Card.Divider/>
             <Text style={styles.categoryText}>{category}: {budget}</Text>
-            <Progress.Bar progress={progress} width={200} />
+            <Progress.Bar progress={progress} width={200} color={progress >= 1 ? 'red' : progress >= 0.5 ? 'yellow' : 'green'} />
             {progress >= 1 && <Text style={styles.warningText}>You have reached your budget limit.</Text>}
-          </View>
+          </Card>
         );
       })}
       <Button
@@ -59,6 +71,7 @@ const ViewBudgets = () => {
         onPress={clearAll}
         style={styles.clearButton}
       />
+     
     </View>
   );
 };
@@ -69,9 +82,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f0f0f0',
   },
-  item: {
-    marginBottom: 15,
-  },
+ 
   categoryText: {
     fontSize: 18,
     marginBottom: 5,
@@ -84,6 +95,7 @@ const styles = StyleSheet.create({
   clearButton: {
     marginTop: 20,
   },
+ 
 });
 
 export default ViewBudgets;

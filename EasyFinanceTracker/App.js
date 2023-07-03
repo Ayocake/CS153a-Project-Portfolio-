@@ -8,7 +8,7 @@ import AccountSummary from './components/AccountSummary';
 import TransactionHistory from './components/TransactionHistory';
 import SetBudgets from './components/SetBudgets';
 import ViewBudgets from './components/ViewBudgets';
-
+import CostSplit from './components/CostSplit';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +23,7 @@ function App() {
         <Stack.Screen name="TransactionHistory" component={TransactionHistory} />
         <Stack.Screen name="SetBudgets" component={SetBudgets} />
         <Stack.Screen name="ViewBudgets" component={ViewBudgets} />
+        <Stack.Screen name="CostSplit" component={CostSplit} />
       </Stack.Navigator>
     </NavigationContainer>
 

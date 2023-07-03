@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CostSplit from './CostSplit';
 
 const AccountSummary = ({ navigation }) => {
   const [transactions, setTransactions] = useState([]);
@@ -73,6 +74,11 @@ const AccountSummary = ({ navigation }) => {
             }
             title="View Transaction History"
             onPress={() => navigation.navigate('TransactionHistory', { transactions })}
+          />
+          <Button
+          
+            title="Cost Split"
+            onPress={() => navigation.navigate(CostSplit)}
           />
           <Button
             icon={
